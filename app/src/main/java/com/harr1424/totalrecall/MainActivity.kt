@@ -9,13 +9,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    var list = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var list = mutableListOf<String>(
-            "School", "Work", "Research", "App Dev"
-        )
+        list.add("School")
+        list.add("Work")
 
         val adapter = ListAdapter(list)
         list_view.adapter = adapter
@@ -26,19 +28,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: Add new item to list
-    // TODO: Save list state somehow
+    // TODO: Save list state using SavedInstanceState
     // TODO: Delete task using long click
     private fun addListItem() {
         val dialogTitle = "Add a New Task"
         val positiveButtonTitle = "Add"
+        val negativeButtonTitle = "Cancel"
         val builder = AlertDialog.Builder(this)
         val newItemEditText = EditText(this)
         newItemEditText.inputType = InputType.TYPE_CLASS_TEXT
         builder.setTitle(dialogTitle)
         builder.setView(newItemEditText)
         builder.setPositiveButton(positiveButtonTitle) {
-            dialog, _ -> dialog.dismiss()
+            dialog, id -> list.add(newItemEditText.text.toString())
+        }
+        builder.setNegativeButton(negativeButtonTitle){
+            dialog, id -> dialog.cancel()
         }
         builder.create().show()
     }
