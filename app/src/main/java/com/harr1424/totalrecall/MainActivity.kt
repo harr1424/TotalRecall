@@ -16,11 +16,9 @@ const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
-    // TODO: Delete task using long click, see custom adapter
-
-
     var list = mutableListOf<String>()
     lateinit var prefs: SharedPreferences
+    lateinit var adapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "OnCreate() called")
@@ -31,12 +29,12 @@ class MainActivity : AppCompatActivity() {
         prefs = this.getPreferences(Context.MODE_PRIVATE)
         list = prefs.getStringSet("TASK_LIST", null)?.toMutableList() ?: mutableListOf<String>()
 
-        val adapter = ListAdapter(list)
+        adapter = ListAdapter(list)
         list_view.adapter = adapter
         list_view.layoutManager = LinearLayoutManager(this)
 
         floatingActionButton.setOnClickListener{
-             addListItem()
+            addListItem()
         }
     }
 
@@ -58,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         builder.setView(newItemEditText)
         builder.setPositiveButton(positiveButtonTitle) {
             dialog, id -> list.add(newItemEditText.text.toString())
-
+            adapter.notifyDataSetChanged()
         }
         builder.setNegativeButton(negativeButtonTitle){
             dialog, id -> dialog.cancel()
