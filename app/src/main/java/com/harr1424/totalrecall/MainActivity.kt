@@ -16,6 +16,9 @@ const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+    // TODO: Delete task using long click, see custom adapter
+
+
     var list = mutableListOf<String>()
     lateinit var prefs: SharedPreferences
 
@@ -38,20 +41,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Save the list to shared preferences
-    // TODO not persistent
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         Log.d(TAG, "onSavedInstanceState() called")
         super.onSaveInstanceState(outState, outPersistentState)
-        val set = HashSet<String>()
-        set.addAll(list)
-        val editor = prefs.edit()
-        editor.putStringSet("TASK_LIST", set)
-        editor.commit()
     }
-
-
-    // TODO: Delete task using long click
-
 
     private fun addListItem() {
         Log.d(TAG, "addListItem() called")
@@ -65,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         builder.setView(newItemEditText)
         builder.setPositiveButton(positiveButtonTitle) {
             dialog, id -> list.add(newItemEditText.text.toString())
+
         }
         builder.setNegativeButton(negativeButtonTitle){
             dialog, id -> dialog.cancel()
@@ -85,11 +79,21 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         Log.d(TAG, "onPause() called")
         super.onPause()
+        val set = HashSet<String>()
+        set.addAll(list)
+        val editor = prefs.edit()
+        editor.putStringSet("TASK_LIST", set)
+        editor.commit()
     }
 
     override fun onStop() {
         Log.d(TAG, "onStopo() called")
         super.onStop()
+        val set = HashSet<String>()
+        set.addAll(list)
+        val editor = prefs.edit()
+        editor.putStringSet("TASK_LIST", set)
+        editor.commit()
     }
 
     override fun onRestart() {
